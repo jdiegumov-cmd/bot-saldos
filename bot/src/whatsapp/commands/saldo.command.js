@@ -34,7 +34,7 @@ $0
 
     const mentions = await msg.getMentions();
 
-    if (!mentions.length || !args[2]) return msg.reply(`✨ Uso correcto:
+    if (!mentions.length) return msg.reply(`✨ Uso correcto:
 
   !saldo @usuario`);
     //console.log(mentions[0]);
