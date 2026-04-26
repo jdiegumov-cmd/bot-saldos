@@ -1,33 +1,28 @@
-const saldoCommand=require('./commands/saldo.command');
+const saldoCommand = require("./commands/saldo.command");
 
-module.exports=async(msg)=>{
+module.exports = async (msg) => {
+  
+   const text = msg.body.trim();
 
- const text=msg.body.trim();
+  if (!text.startsWith("!")) return;
 
- if(!text.startsWith("!"))
-   return;
+  const args = text.split(" ");
 
- const args=text.split(" ");
+  const command = args[0].toLowerCase();
 
- const command=args[0].toLowerCase();
+  switch (command) {
+    case "!saldo":
+      return saldoCommand.consultar(msg, args);
 
+    case "!agregar":
+      return saldoCommand.agregar(msg, args);
 
- switch(command){
+    case "!quitar":
+      return saldoCommand.quitar(msg, args);
 
-   case '!saldo':
-      return saldoCommand.consultar(msg,args);
-
-
-   case '!agregar':
-      return saldoCommand.agregar(msg,args);
-
-
-   case '!quitar':
-      return saldoCommand.quitar(msg,args);
-
-   case '!info':
+    case "!info":
       return msg.reply(
-`📌 COMANDOS DISPONIBLES
+        `📌 COMANDOS DISPONIBLES
 
 💰 Consultar saldo
 
@@ -37,9 +32,7 @@ module.exports=async(msg)=>{
 
 !saldo @usuario → Consulta el saldo de otro usuario
 !agregar @usuario monto ➕ → Añade saldo a un usuario
-!quitar @usuario monto ➖ → Resta saldo a un usuario`
+!quitar @usuario monto ➖ → Resta saldo a un usuario`,
       );
-
- }
-
-}
+  }
+};
