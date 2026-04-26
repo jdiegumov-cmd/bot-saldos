@@ -79,7 +79,8 @@ exports.removeSaldo = async (req, res) => {
 
     if (client.balance < Number(amount)) {
       return res.status(400).json({
-        error: "Saldo insuficiente",
+        error: `saldo insuficiente
+El usuario no tiene suficiente saldo para realizar esta acción.`,
       });
     }
 

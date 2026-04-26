@@ -18,38 +18,60 @@ exports.consultar = async (msg, args) => {
     if (args.length === 1) {
       const contact = await msg.getContact();
       const saldo = await BalanceService.getBalance(contact.id.user);
+      if (saldo.balance == 0)  return msg.reply(`💰 Tu saldo actual:
+$0
 
-      return msg.reply(`Tu saldo: $${saldo.balance}`);
+🏆 Nivel de pobreza desbloqueado`);
+
+      return msg.reply(`👤💰 Tu saldo
+      
+💵 Saldo actual: $${saldo.balance}`);
     }
 
-    if (!(await isAdmin(msg))) return msg.reply("Solo admins");
+    if (!(await isAdmin(msg))) return msg.reply(`🔒 Solo Administradores
+
+⚠️ Este comando es exclusivo para administradores`);
 
     const mentions = await msg.getMentions();
 
-    if (!mentions.length) return msg.reply("Menciona usuario");
+    if (!mentions.length || !args[2]) return msg.reply(`✨ Uso correcto:
+
+  !saldo @usuario`);
     //console.log(mentions[0]);
     //console.log(mentions[0].number);
     //console.log(mentions[0].id);
     //console.log(mentions[0].id.user);
     const saldo = await BalanceService.getBalance(mentions[0].id.user);
 
-    return msg.reply(`Saldo usuario: $${saldo.balance}`);
+    if (saldo.balance == 0) return msg.reply(`💰 Saldo actual:
+$0
+
+🏆 Nivel de pobreza desbloqueado`);
+
+    return msg.reply(`👤💰 Saldo de usuario
+      
+💵 Saldo actual: $${saldo.balance}`);
   } catch (error) {
-    return msg.reply(`Error: ${error.message}`);
+    return msg.reply(`❌ Error: ${error.message}`);
   }
 };
 
 exports.agregar = async (msg, args) => {
   try {
-    if (!(await isAdmin(msg))) return msg.reply("Solo admins");
+    if (!(await isAdmin(msg))) return msg.reply(`🔒 Solo Administradores
+
+⚠️ Este comando es exclusivo para administradores`);
 
     const mentions = await msg.getMentions();
 
-    if (!mentions.length) return msg.reply("Menciona usuario");
+    if (!mentions.length || !args[2]) return msg.reply(`✨ Uso correcto:
+
+!agregar @usuario monto`);
 
     const amount = parseFloat(args[2]);
 
-    if (isNaN(amount)) return msg.reply("Monto inválido");
+    if (isNaN(amount)) return msg.reply(` ⚠️ Monto inválido
+Por favor, ingresa una cantidad válida`);
 
     const result = await BalanceService.addBalance({
       user: mentions[0].id.user,
@@ -58,27 +80,33 @@ exports.agregar = async (msg, args) => {
     });
 
     msg.reply(
-      `Saldo agregado
+      `💰✨ Saldo actualizado
 
-Nuevo saldo:
+➕ Se ha agregado correctamente
+
+💵 Nuevo saldo:
 $${result.balance}`,
     );
   } catch (error) {
-    msg.reply(`Error: ${error.message}`);
+    msg.reply(`❌ Error: ${error.message}`);
   }
 };
 
 exports.quitar = async (msg, args) => {
   try {
-    if (!(await isAdmin(msg))) return msg.reply("Solo admins");
+    if (!(await isAdmin(msg))) return msg.reply(`🔒 Solo Administradores
+
+⚠️ Este comando es exclusivo para administradores`);
 
     const mentions = await msg.getMentions();
 
-    if (!mentions.length) return msg.reply("Menciona usuario");
+    if (!mentions.length || !args[2]) return msg.reply(`✨ Uso correcto:
+!agregar @usuario monto`);
 
     const amount = parseFloat(args[2]);
 
-    if (isNaN(amount)) return msg.reply("Monto inválido");
+    if (isNaN(amount)) return msg.reply(`⚠️ Monto inválido
+Por favor, ingresa una cantidad válida`);
 
     const result = await BalanceService.removeBalance({
       user: mentions[0].id.user,
@@ -87,12 +115,14 @@ exports.quitar = async (msg, args) => {
     });
 
     msg.reply(
-      `Saldo descontado
+      `💸 Saldo actualizado
 
-Nuevo saldo:
+➖ Se ha descontado correctamente
+
+💰 Nuevo saldo:
 $${result.balance}`,
     );
   } catch (error) {
-    msg.reply(`Error: ${error.message}`);
+    msg.reply(`❌ Error: ${error.message}`);
   }
 };

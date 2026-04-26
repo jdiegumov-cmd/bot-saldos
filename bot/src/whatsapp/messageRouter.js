@@ -25,16 +25,19 @@ module.exports=async(msg)=>{
    case '!quitar':
       return saldoCommand.quitar(msg,args);
 
-   default:
+   case '!info':
       return msg.reply(
-`Comandos:
+`📌 COMANDOS DISPONIBLES
 
-!saldo
-!saldo @usuario
+💰 Consultar saldo
 
-Admins:
-!agregar @usuario monto
-!quitar @usuario monto`
+!saldo → Muestra tu saldo actual
+
+🛠️ Comandos de Administrador
+
+!saldo @usuario → Consulta el saldo de otro usuario
+!agregar @usuario monto ➕ → Añade saldo a un usuario
+!quitar @usuario monto ➖ → Resta saldo a un usuario`
       );
 
  }
